@@ -44,7 +44,7 @@ export const useTodo = (): IUseTodo => {
   };
 
   const removeTodo = (id: number): void => {
-    setTodos(prevState => prevState.filter((todo: Itodo) => todo.id === id));
+    setTodos(prevState => prevState.filter((todo: Itodo) => todo.id !== id));
   };
 
   const createTodo = (todo: Itodo): void => {

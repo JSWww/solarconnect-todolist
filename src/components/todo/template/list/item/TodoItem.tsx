@@ -19,8 +19,6 @@ const TodoItem = ({
 
   const handleToggle = () => {};
 
-  const handleRemove = () => {};
-
   return (
     <TodoItemBlock>
       <CheckCircle done={done} onClick={handleToggle}>
@@ -30,7 +28,7 @@ const TodoItem = ({
       <DateText>
         {todo.deadline ? `${todo.deadline} 까지` : '기한 없음'}
       </DateText>
-      <Remove onClick={handleRemove}>
+      <Remove onClick={() => removeTodo(todo.id)}>
         <DeleteOutlined />
       </Remove>
     </TodoItemBlock>
