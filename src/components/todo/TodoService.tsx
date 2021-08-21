@@ -31,7 +31,14 @@ export const useTodo = (): IUseTodo => {
     const data: string = localStorage.getItem('todos') || '[]';
     const todos: Itodo[] = JSON.parse(data);
 
-    nextId.current = todos.length;
+    nextId.current =
+      todos.length === 0
+        ? 0
+        : Math.max.apply(
+            null,
+            todos.map(todo => todo.id),
+          );
+
     setTodos(todos);
   };
 
