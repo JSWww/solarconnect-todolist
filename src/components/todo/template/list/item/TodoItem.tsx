@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { CheckOutlined, DeleteOutlined } from '@ant-design/icons';
 
@@ -15,9 +15,12 @@ const TodoItem = ({
   removeTodo,
   todo,
 }: TodoItemProps): ReactElement => {
-  const done = false;
+  const [done, setDone] = useState<boolean>(todo.done);
 
-  const handleToggle = () => {};
+  const handleToggle = () => {
+    setDone(prev => !prev);
+    toggleTodo(todo.id);
+  };
 
   return (
     <TodoItemBlock>
@@ -25,7 +28,7 @@ const TodoItem = ({
         {done && <CheckOutlined />}
       </CheckCircle>
       <TodoText done={done}>{todo.text}</TodoText>
-      <DateText>
+      <DateText done={done}>
         {todo.deadline ? `${todo.deadline} 까지` : '기한 없음'}
       </DateText>
       <Remove onClick={() => removeTodo(todo.id)}>
@@ -57,6 +60,7 @@ const CheckCircle = styled.div<{ done: boolean }>`
   justify-content: center;
   margin-right: 20px;
   cursor: pointer;
+
   ${props =>
     props.done &&
     css`
@@ -65,12 +69,9 @@ const CheckCircle = styled.div<{ done: boolean }>`
     `}
 `;
 
-const TodoText = styled.div<{ done: boolean }>`
-  flex: 1;
-  font-size: 16px;
+const Text = styled.div<{ done: boolean }>`
   color: #119955;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
   ${props =>
     props.done &&
     css`
@@ -79,9 +80,15 @@ const TodoText = styled.div<{ done: boolean }>`
     `}
 `;
 
-const DateText = styled.div`
+const TodoText = styled(Text)`
+  flex: 1;
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const DateText = styled(Text)`
   font-size: 14px;
-  color: #119955;
   margin: 0 15px;
 `;
 

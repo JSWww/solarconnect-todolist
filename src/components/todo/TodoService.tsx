@@ -40,16 +40,24 @@ export const useTodo = (): IUseTodo => {
   };
 
   const toggleTodo = (id: number): void => {
-    //@TODO
+    setTodos(prev =>
+      prev.map((todo: Itodo) => {
+        if (todo.id === id) {
+          todo.done = !todo.done;
+        }
+
+        return todo;
+      }),
+    );
   };
 
   const removeTodo = (id: number): void => {
-    setTodos(prevState => prevState.filter((todo: Itodo) => todo.id !== id));
+    setTodos(prev => prev.filter((todo: Itodo) => todo.id !== id));
   };
 
   const createTodo = (todo: Itodo): void => {
-    setTodos(prevState =>
-      prevState.concat({
+    setTodos(prev =>
+      prev.concat({
         ...todo,
         id: ++nextId.current,
       }),
