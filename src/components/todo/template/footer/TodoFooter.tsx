@@ -4,11 +4,14 @@ import styled from 'styled-components';
 import { Itodo } from 'components/todo/TodoService';
 
 interface HooksTodoHeadProps {
-  todos: Itodo[];
+  todos: Itodo[] | null;
 }
 
-const Todofooter = ({ todos }: HooksTodoHeadProps): ReactElement => {
+const Todofooter = ({ todos }: HooksTodoHeadProps): ReactElement | null => {
+  if (!todos) return null;
+
   const undoneTasks = todos.filter(todo => !todo.done);
+
   return (
     <TodoFooterBlock>
       <LeftText className="tasks-left">

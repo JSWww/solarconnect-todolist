@@ -8,7 +8,7 @@ export type Itodo = {
 };
 
 interface IUseTodo {
-  todos: Itodo[];
+  todos: Itodo[] | null;
   nextId: number;
   toggleTodo: (id: number) => void;
   removeTodo: (id: number) => void;
@@ -16,7 +16,7 @@ interface IUseTodo {
 }
 
 export const useTodo = (): IUseTodo => {
-  const [todos, setTodos] = useState<Itodo[]>([]);
+  const [todos, setTodos] = useState<Itodo[] | null>(null);
   const nextId = useRef<number>(0);
 
   useEffect(() => {
@@ -24,22 +24,22 @@ export const useTodo = (): IUseTodo => {
   }, []);
 
   useEffect(() => {
-    saveData(todos);
+    saveData(todos as Itodo[]);
   }, [todos]);
 
   const loadData = (): void => {
     const data: string = localStorage.getItem('todos') || '[]';
-    const todos: Itodo[] = JSON.parse(data);
+    const savedTodos: Itodo[] = JSON.parse(data);
 
     nextId.current =
-      todos.length === 0
+      savedTodos.length === 0
         ? 0
         : Math.max.apply(
             null,
-            todos.map(todo => todo.id),
+            savedTodos.map(todo => todo.id),
           );
 
-    setTodos(todos);
+    setTodos(savedTodos);
   };
 
   const saveData = (todos: Itodo[]): void => {
@@ -48,7 +48,7 @@ export const useTodo = (): IUseTodo => {
 
   const toggleTodo = (id: number): void => {
     setTodos(prev =>
-      prev.map((todo: Itodo) => {
+      (prev as Itodo[]).map((todo: Itodo) => {
         if (todo.id === id) {
           todo.done = !todo.done;
         }
@@ -59,12 +59,12 @@ export const useTodo = (): IUseTodo => {
   };
 
   const removeTodo = (id: number): void => {
-    setTodos(prev => prev.filter((todo: Itodo) => todo.id !== id));
+    setTodos(prev => (prev as Itodo[]).filter((todo: Itodo) => todo.id !== id));
   };
 
   const createTodo = (todo: Itodo): void => {
     setTodos(prev =>
-      prev.concat({
+      (prev as Itodo[]).concat({
         ...todo,
         id: ++nextId.current,
       }),

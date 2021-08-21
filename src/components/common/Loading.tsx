@@ -10,7 +10,10 @@ interface ILoadingProps {
 export default function Loading(props: ILoadingProps): ReactElement {
   return (
     <LoadingOutlined
-      style={{ fontSize: props.size === 'large' ? 48 : 24, ...props.style }}
+      style={{
+        fontSize: props.size === 'large' ? 48 : 24,
+        ...props.style,
+      }}
       spin
     />
   );
