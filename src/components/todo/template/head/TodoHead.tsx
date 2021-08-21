@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 import { MONTHS, DAYS } from 'constants/constants';
 
-const TodoHead = () => {
+const TodoHead = (): ReactElement => {
   const [date, setDate] = useState<Date>(new Date());
 
   useEffect(() => {

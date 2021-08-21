@@ -1,67 +1,64 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export type Itodo = {
   id: number;
   text: string;
   done: boolean;
+  deadline: string;
 };
 
-let initialTodos: Itodo[] = [];
+interface IUseTodo {
+  todos: Itodo[];
+  nextId: number;
+  toggleTodo: (id: number) => void;
+  removeTodo: (id: number) => void;
+  createTodo: (todo: Itodo) => void;
+}
 
-export const useTodo = () => {
-  const [todoState, setTodoState] = useState(initialTodos);
-  let nextIdState = 0;
+export const useTodo = (): IUseTodo => {
+  const [todos, setTodos] = useState<Itodo[]>([]);
+  const nextId = useRef<number>(0);
 
   useEffect(() => {
     loadData();
   }, []);
 
   useEffect(() => {
-    saveData();
-  }, [todoState]);
+    saveData(todos);
+  }, [todos]);
 
-  const incrementNextId = () => {
-    nextIdState = nextIdState + 1;
+  const loadData = (): void => {
+    const data: string = localStorage.getItem('todos') || '[]';
+    const todos: Itodo[] = JSON.parse(data);
+
+    nextId.current = todos.length;
+    setTodos(todos);
   };
 
-  const toggleTodo = (id: number) => {
+  const saveData = (todos: Itodo[]): void => {
+    localStorage.setItem('todos', JSON.stringify(todos));
+  };
+
+  const toggleTodo = (id: number): void => {
     //@TODO
   };
 
-  const removeTodo = (id: number) => {
-    setTodoState(prevState =>
-      prevState.filter((todo: Itodo) => todo.id === id),
-    );
+  const removeTodo = (id: number): void => {
+    setTodos(prevState => prevState.filter((todo: Itodo) => todo.id === id));
   };
 
-  const createTodo = (todo: Itodo) => {
-    const nextId = todoState.length + 1;
-    setTodoState(prevState =>
+  const createTodo = (todo: Itodo): void => {
+    setTodos(prevState =>
       prevState.concat({
         ...todo,
-        id: nextId,
+        id: ++nextId.current,
       }),
     );
   };
 
-  const loadData = () => {
-    let data = localStorage.getItem('todos');
-    if (data === undefined) data = '';
-    initialTodos = JSON.parse(data!);
-    if (initialTodos && initialTodos.length >= 1) {
-      incrementNextId();
-    }
-    setTodoState(initialTodos);
-  };
-
-  const saveData = () => {
-    localStorage.setItem('todos', JSON.stringify(todoState));
-  };
-
   return {
-    todoState,
-    nextIdState,
-    incrementNextId,
+    todos,
+    nextId: nextId.current,
     toggleTodo,
     removeTodo,
     createTodo,

@@ -1,5 +1,13 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import styled from 'styled-components';
+
+type Props = {
+  children: JSX.Element[];
+};
+
+function TodoTemplate({ children }: Props): ReactElement {
+  return <TodoTemplateBlock>{children}</TodoTemplateBlock>;
+}
 
 const TodoTemplateBlock = styled.div`
   width: 70%;
@@ -20,9 +28,5 @@ const TodoTemplateBlock = styled.div`
   display: flex;
   flex-direction: column;
 `;
-
-function TodoTemplate(props: any) {
-  return <TodoTemplateBlock>{props.children}</TodoTemplateBlock>;
-}
 
 export default React.memo(TodoTemplate);

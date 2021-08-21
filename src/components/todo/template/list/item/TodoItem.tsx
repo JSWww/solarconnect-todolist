@@ -1,25 +1,50 @@
-import { CheckOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Itodo } from 'components/todo/TodoService';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import styled, { css } from 'styled-components';
+import { CheckOutlined, DeleteOutlined } from '@ant-design/icons';
 
-const Remove = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #119955;
-  font-size: 16px;
-`;
+import { Itodo } from 'components/todo/TodoService';
+
+interface TodoItemProps {
+  toggleTodo: (id: number) => void;
+  removeTodo: (id: number) => void;
+  todo: Itodo;
+}
+
+const TodoItem = ({
+  toggleTodo,
+  removeTodo,
+  todo,
+}: TodoItemProps): ReactElement => {
+  const done = false;
+
+  const handleToggle = () => {};
+
+  const handleRemove = () => {};
+
+  return (
+    <TodoItemBlock>
+      <CheckCircle done={done} onClick={handleToggle}>
+        {done && <CheckOutlined />}
+      </CheckCircle>
+      <TodoText done={done}>{todo.text}</TodoText>
+      <DateText>
+        {todo.deadline ? `${todo.deadline} 까지` : '기한 없음'}
+      </DateText>
+      <Remove onClick={handleRemove}>
+        <DeleteOutlined />
+      </Remove>
+    </TodoItemBlock>
+  );
+};
 
 const TodoItemBlock = styled.div`
   display: flex;
   align-items: center;
   padding-top: 12px;
   padding-bottom: 12px;
+
   &:hover {
-    ${Remove} {
-      display: initial;
-    }
+    background-color: rgba(255, 255, 255, 1);
   }
 `;
 
@@ -42,10 +67,12 @@ const CheckCircle = styled.div<{ done: boolean }>`
     `}
 `;
 
-const Text = styled.div<{ done: boolean }>`
+const TodoText = styled.div<{ done: boolean }>`
   flex: 1;
   font-size: 16px;
   color: #119955;
+  overflow: hidden;
+  text-overflow: ellipsis;
   ${props =>
     props.done &&
     css`
@@ -54,29 +81,19 @@ const Text = styled.div<{ done: boolean }>`
     `}
 `;
 
-interface TodoItemProps {
-  toggleTodo: (id: number) => void;
-  removeTodo: (id: number) => void;
-  todo: Itodo;
-}
+const DateText = styled.div`
+  font-size: 14px;
+  color: #119955;
+  margin: 0 15px;
+`;
 
-const TodoItem = ({ toggleTodo, removeTodo, todo }: TodoItemProps) => {
-  const done = false;
-  const handleToggle = () => {};
-
-  const handleRemove = () => {};
-
-  return (
-    <TodoItemBlock>
-      <CheckCircle done={done} onClick={handleToggle}>
-        {done && <CheckOutlined />}
-      </CheckCircle>
-      <Text done={done}>{todo.text}</Text>
-      <Remove onClick={handleRemove}>
-        <DeleteOutlined />
-      </Remove>
-    </TodoItemBlock>
-  );
-};
+const Remove = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #119955;
+  font-size: 16px;
+  cursor: pointer;
+`;
 
 export default React.memo(TodoItem);
