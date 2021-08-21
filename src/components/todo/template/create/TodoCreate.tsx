@@ -113,6 +113,7 @@ const CircleButton = styled.button`
   align-self: center;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;
 
 export default React.memo(TodoCreate);

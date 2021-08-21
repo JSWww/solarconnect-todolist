@@ -43,10 +43,6 @@ const TodoItemBlock = styled.div`
   align-items: center;
   padding-top: 12px;
   padding-bottom: 12px;
-
-  &:hover {
-    background-color: rgba(255, 255, 255, 1);
-  }
 `;
 
 const CheckCircle = styled.div<{ done: boolean }>`
